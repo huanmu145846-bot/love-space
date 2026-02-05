@@ -39,146 +39,67 @@
             overflow-x: hidden;
             transition: background 0.5s, color 0.5s;
         }
-        .stars {
-            position: fixed; inset: 0;
-            pointer-events: none; z-index: 0;
-            opacity: 0; transition: opacity 0.5s;
-        }
+        .stars { position: fixed; inset: 0; pointer-events: none; z-index: 0; opacity: 0; transition: opacity 0.5s; }
         [data-theme="night"] .stars { opacity: 1; }
-        .star {
-            position: absolute;
-            background: white;
-            border-radius: 50%;
-            animation: twinkle 2s ease-in-out infinite;
-        }
+        .star { position: absolute; background: white; border-radius: 50%; animation: twinkle 2s ease-in-out infinite; }
         @keyframes twinkle { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
-        .falling-container {
-            position: fixed; inset: 0;
-            pointer-events: none; z-index: 1; overflow: hidden;
-        }
-        .falling-item {
-            position: absolute; top: -50px;
-            animation: fall linear forwards;
-        }
+        .falling-container { position: fixed; inset: 0; pointer-events: none; z-index: 1; overflow: hidden; }
+        .falling-item { position: absolute; top: -50px; animation: fall linear forwards; }
         @keyframes fall { to { transform: translateY(110vh) rotate(720deg); } }
-        .cursor-trail {
-            position: fixed;
-            pointer-events: none;
-            z-index: 9999;
-            font-size: 20px;
-            animation: trailFade 1s ease-out forwards;
-        }
-        @keyframes trailFade {
-            0% { opacity: 1; transform: scale(1) translateY(0); }
-            100% { opacity: 0; transform: scale(0.5) translateY(-30px); }
-        }
-        .login-screen {
-            position: fixed; inset: 0;
-            background: var(--bg-primary);
-            display: flex; align-items: center; justify-content: center;
-            z-index: 1000;
-            transition: opacity 0.8s, transform 0.8s;
-        }
+        .cursor-trail { position: fixed; pointer-events: none; z-index: 9999; font-size: 20px; animation: trailFade 1s ease-out forwards; }
+        @keyframes trailFade { 0% { opacity: 1; transform: scale(1) translateY(0); } 100% { opacity: 0; transform: scale(0.5) translateY(-30px); } }
+        .login-screen { position: fixed; inset: 0; background: var(--bg-primary); display: flex; align-items: center; justify-content: center; z-index: 1000; transition: opacity 0.8s, transform 0.8s; }
         .login-screen.hidden { opacity: 0; pointer-events: none; transform: scale(1.1); }
-        .login-box {
-            text-align: center;
-            padding: 60px 50px;
-            background: var(--bg-card);
-            backdrop-filter: blur(20px);
-            border-radius: 30px;
-            box-shadow: 0 25px 80px var(--shadow);
-            max-width: 400px; width: 90%;
-            border: 1px solid rgba(232, 164, 184, 0.2);
-            position: relative; z-index: 10;
-        }
+        .login-box { text-align: center; padding: 60px 50px; background: var(--bg-card); backdrop-filter: blur(20px); border-radius: 30px; box-shadow: 0 25px 80px var(--shadow); max-width: 400px; width: 90%; border: 1px solid rgba(232, 164, 184, 0.2); position: relative; z-index: 10; }
         .login-hearts { font-size: 60px; margin-bottom: 20px; animation: float 3s ease-in-out infinite; }
         @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
         .login-title { font-family: 'Ma Shan Zheng', cursive; font-size: 36px; color: var(--rose-dark); margin-bottom: 10px; }
         .login-subtitle { color: var(--text-light); font-size: 14px; margin-bottom: 40px; letter-spacing: 2px; }
-        .login-input {
-            width: 100%; padding: 18px 25px;
-            border: 2px solid transparent; border-radius: 50px;
-            background: var(--bg-secondary);
-            font-size: 16px; text-align: center; color: var(--text);
-            transition: all 0.3s; letter-spacing: 8px; font-family: inherit;
-        }
+        .login-input { width: 100%; padding: 18px 25px; border: 2px solid transparent; border-radius: 50px; background: var(--bg-secondary); font-size: 16px; text-align: center; color: var(--text); transition: all 0.3s; letter-spacing: 8px; font-family: inherit; }
         .login-input:focus { outline: none; border-color: var(--rose); box-shadow: 0 0 0 4px rgba(232, 164, 184, 0.2); }
         .login-input::placeholder { letter-spacing: 2px; color: var(--text-light); }
-        .login-btn {
-            width: 100%; padding: 18px; border: none; border-radius: 50px;
-            background: linear-gradient(135deg, var(--rose) 0%, var(--rose-dark) 100%);
-            color: white; font-size: 16px; cursor: pointer;
-            margin-top: 20px; transition: all 0.3s;
-            font-family: inherit; letter-spacing: 3px;
-        }
+        .login-btn { width: 100%; padding: 18px; border: none; border-radius: 50px; background: linear-gradient(135deg, var(--rose) 0%, var(--rose-dark) 100%); color: white; font-size: 16px; cursor: pointer; margin-top: 20px; transition: all 0.3s; font-family: inherit; letter-spacing: 3px; }
         .login-btn:hover { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(232, 164, 184, 0.4); }
         .login-error { color: #e57373; font-size: 14px; margin-top: 15px; opacity: 0; transition: opacity 0.3s; }
         .login-error.show { opacity: 1; }
+        .sync-status { position: fixed; bottom: 20px; left: 20px; z-index: 100; padding: 10px 20px; border-radius: 20px; font-size: 12px; background: var(--bg-card); box-shadow: 0 3px 15px var(--shadow); display: flex; align-items: center; gap: 8px; transition: all 0.3s; }
+        .sync-status.syncing { color: #ffa726; }
+        .sync-status.synced { color: #66bb6a; }
+        .sync-status.error { color: #ef5350; }
+        .sync-dot { width: 8px; height: 8px; border-radius: 50%; background: currentColor; }
+        .sync-status.syncing .sync-dot { animation: pulse 1s infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
         .theme-toggle { position: fixed; top: 20px; right: 20px; z-index: 100; display: flex; gap: 10px; }
-        .toggle-btn {
-            width: 50px; height: 50px; border-radius: 50%; border: none;
-            background: var(--bg-card); color: var(--text); font-size: 22px;
-            cursor: pointer; box-shadow: 0 5px 20px var(--shadow);
-            transition: all 0.3s; display: flex; align-items: center; justify-content: center;
-        }
+        .toggle-btn { width: 50px; height: 50px; border-radius: 50%; border: none; background: var(--bg-card); color: var(--text); font-size: 22px; cursor: pointer; box-shadow: 0 5px 20px var(--shadow); transition: all 0.3s; display: flex; align-items: center; justify-content: center; }
         .toggle-btn:hover { transform: scale(1.1); }
         .toggle-btn.active { background: var(--rose); color: white; }
         .app { display: none; min-height: 100vh; position: relative; z-index: 2; }
         .app.active { display: block; animation: fadeIn 1s ease; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         .header-decor { height: 200px; background: var(--gradient-header); position: relative; overflow: hidden; }
-        .header-decor::before {
-            content: ''; position: absolute;
-            top: -50%; left: -10%; width: 120%; height: 200%;
-            background: radial-gradient(ellipse, rgba(232, 164, 184, 0.3) 0%, transparent 70%);
-            animation: pulse 8s ease-in-out infinite;
-        }
-        @keyframes pulse { 0%, 100% { transform: scale(1); opacity: 0.5; } 50% { transform: scale(1.1); opacity: 0.8; } }
-        .main-card {
-            max-width: 900px; margin: -100px auto 40px;
-            background: var(--bg-card); border-radius: 40px; padding: 50px;
-            box-shadow: 0 30px 100px var(--shadow);
-            position: relative; z-index: 10; transition: background 0.5s;
-        }
+        .header-decor::before { content: ''; position: absolute; top: -50%; left: -10%; width: 120%; height: 200%; background: radial-gradient(ellipse, rgba(232, 164, 184, 0.3) 0%, transparent 70%); animation: pulse-bg 8s ease-in-out infinite; }
+        @keyframes pulse-bg { 0%, 100% { transform: scale(1); opacity: 0.5; } 50% { transform: scale(1.1); opacity: 0.8; } }
+        .main-card { max-width: 900px; margin: -100px auto 40px; background: var(--bg-card); border-radius: 40px; padding: 50px; box-shadow: 0 30px 100px var(--shadow); position: relative; z-index: 10; transition: background 0.5s; }
         .couple-section { display: flex; align-items: center; justify-content: center; gap: 30px; margin-bottom: 40px; }
         .avatar-wrapper { position: relative; }
-        .avatar {
-            width: 120px; height: 120px; border-radius: 50%;
-            border: 4px solid var(--bg-card); box-shadow: 0 10px 40px var(--shadow);
-            cursor: pointer; transition: transform 0.3s;
-            background: var(--rose-light);
-            display: flex; align-items: center; justify-content: center;
-            font-size: 40px; overflow: hidden;
-        }
+        .avatar { width: 120px; height: 120px; border-radius: 50%; border: 4px solid var(--bg-card); box-shadow: 0 10px 40px var(--shadow); cursor: pointer; transition: transform 0.3s; background: var(--rose-light); display: flex; align-items: center; justify-content: center; font-size: 40px; overflow: hidden; }
         .avatar:hover { transform: scale(1.05); }
         .avatar img { width: 100%; height: 100%; object-fit: cover; }
         .avatar-name { text-align: center; margin-top: 12px; }
-        .avatar-name input {
-            border: none; background: transparent; text-align: center;
-            font-family: inherit; font-size: 14px; color: var(--text);
-            width: 100px; padding: 5px; border-radius: 20px; transition: background 0.3s;
-        }
+        .avatar-name input { border: none; background: transparent; text-align: center; font-family: inherit; font-size: 14px; color: var(--text); width: 100px; padding: 5px; border-radius: 20px; transition: background 0.3s; }
         .avatar-name input:focus { outline: none; background: var(--rose-light); }
         .heart-connector { font-size: 50px; color: var(--rose); animation: heartbeat 1.5s ease-in-out infinite; }
         @keyframes heartbeat { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.2); } }
         .timer-section { text-align: center; padding: 40px 0; border-top: 1px solid var(--rose-light); border-bottom: 1px solid var(--rose-light); margin-bottom: 40px; }
         .timer-title { font-family: 'ZCOOL XiaoWei', serif; font-size: 18px; color: var(--text-light); margin-bottom: 15px; }
-        .timer-date-input {
-            font-family: inherit; font-size: 16px; padding: 10px 20px;
-            border: 2px dashed var(--rose-light); border-radius: 30px;
-            background: transparent; color: var(--text); cursor: pointer; margin-bottom: 25px;
-        }
+        .timer-date-input { font-family: inherit; font-size: 16px; padding: 10px 20px; border: 2px dashed var(--rose-light); border-radius: 30px; background: transparent; color: var(--text); cursor: pointer; margin-bottom: 25px; }
         .timer-date-input:focus { outline: none; border-color: var(--rose); }
         .timer-display { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; }
         .timer-unit { text-align: center; }
         .timer-number { font-family: 'Ma Shan Zheng', cursive; font-size: 56px; color: var(--rose-dark); line-height: 1; }
         .timer-label { font-size: 14px; color: var(--text-light); margin-top: 5px; }
         .tabs { display: flex; justify-content: center; gap: 10px; margin-bottom: 30px; flex-wrap: wrap; }
-        .tab-btn {
-            padding: 12px 25px; border: none; background: var(--rose-light);
-            color: var(--text); border-radius: 30px; cursor: pointer;
-            font-family: inherit; font-size: 14px; transition: all 0.3s;
-        }
+        .tab-btn { padding: 12px 25px; border: none; background: var(--rose-light); color: var(--text); border-radius: 30px; cursor: pointer; font-family: inherit; font-size: 14px; transition: all 0.3s; }
         .tab-btn:hover { background: var(--rose); color: white; }
         .tab-btn.active { background: var(--rose-dark); color: white; }
         .tab-content { display: none; animation: slideUp 0.5s ease; }
@@ -196,6 +117,7 @@
         .post-image-btn:hover { background: var(--rose); color: white; border-style: solid; }
         .post-submit { padding: 12px 35px; border: none; background: linear-gradient(135deg, var(--rose) 0%, var(--rose-dark) 100%); color: white; border-radius: 30px; cursor: pointer; font-family: inherit; font-size: 14px; transition: all 0.3s; }
         .post-submit:hover { transform: translateY(-2px); box-shadow: 0 5px 20px rgba(232, 164, 184, 0.4); }
+        .post-submit:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
         .post-image-preview { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 15px; }
         .preview-item { width: 80px; height: 80px; border-radius: 10px; overflow: hidden; position: relative; }
         .preview-item img { width: 100%; height: 100%; object-fit: cover; }
@@ -278,6 +200,10 @@
         .lightbox.active { display: flex; }
         .lightbox img { max-width: 90%; max-height: 90%; border-radius: 10px; }
         .hidden-input { display: none; }
+        .loading-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: none; align-items: center; justify-content: center; z-index: 3000; }
+        .loading-overlay.active { display: flex; }
+        .loading-spinner { width: 50px; height: 50px; border: 4px solid var(--rose-light); border-top-color: var(--rose); border-radius: 50%; animation: spin 1s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
         @media (max-width: 768px) { .masonry-grid { column-count: 2; } }
         @media (max-width: 600px) {
             .main-card { margin: -80px 15px 30px; padding: 30px 20px; border-radius: 30px; }
@@ -293,6 +219,7 @@
             .theme-toggle { top: 10px; right: 10px; }
             .toggle-btn { width: 40px; height: 40px; font-size: 18px; }
             .post-item-images { grid-template-columns: repeat(2, 1fr); }
+            .sync-status { bottom: 10px; left: 10px; padding: 8px 15px; font-size: 11px; }
         }
     </style>
 </head>
@@ -309,6 +236,7 @@
             <p class="login-error" id="loginError">密码不对哦，再试试～</p>
         </div>
     </div>
+    <div class="sync-status synced" id="syncStatus"><div class="sync-dot"></div><span>已同步</span></div>
     <div class="theme-toggle">
         <button class="toggle-btn active" id="btnHearts" onclick="setFallingType('hearts')" title="飘落爱心">❤️</button>
         <button class="toggle-btn" id="btnPetals" onclick="setFallingType('petals')" title="飘落花瓣">🌸</button>
@@ -321,18 +249,18 @@
                 <div class="avatar-wrapper">
                     <div class="avatar" id="avatar1" onclick="document.getElementById('avatarInput1').click()">👦</div>
                     <input type="file" id="avatarInput1" class="hidden-input" accept="image/*" onchange="uploadAvatar(1, this)">
-                    <div class="avatar-name"><input type="text" id="name1" placeholder="他的名字" onchange="saveName(1)"></div>
+                    <div class="avatar-name"><input type="text" id="name1" placeholder="他的名字" onchange="saveConfig()"></div>
                 </div>
                 <div class="heart-connector">💕</div>
                 <div class="avatar-wrapper">
                     <div class="avatar" id="avatar2" onclick="document.getElementById('avatarInput2').click()">👧</div>
                     <input type="file" id="avatarInput2" class="hidden-input" accept="image/*" onchange="uploadAvatar(2, this)">
-                    <div class="avatar-name"><input type="text" id="name2" placeholder="她的名字" onchange="saveName(2)"></div>
+                    <div class="avatar-name"><input type="text" id="name2" placeholder="她的名字" onchange="saveConfig()"></div>
                 </div>
             </div>
             <div class="timer-section">
                 <p class="timer-title">我们在一起已经</p>
-                <input type="date" class="timer-date-input" id="startDate" onchange="saveStartDate()">
+                <input type="date" class="timer-date-input" id="startDate" onchange="saveConfig()">
                 <div class="timer-display">
                     <div class="timer-unit"><div class="timer-number" id="timerDays">0</div><div class="timer-label">天</div></div>
                     <div class="timer-unit"><div class="timer-number" id="timerHours">0</div><div class="timer-label">时</div></div>
@@ -361,7 +289,7 @@
                     <div class="post-actions">
                         <button class="post-image-btn" onclick="document.getElementById('postImageInput').click()">📷 添加图片</button>
                         <input type="file" id="postImageInput" class="hidden-input" accept="image/*" multiple onchange="previewPostImages(this)">
-                        <button class="post-submit" onclick="publishPost()">发布说说 💌</button>
+                        <button class="post-submit" id="postSubmitBtn" onclick="publishPost()">发布说说 💌</button>
                     </div>
                 </div>
                 <div class="posts-list" id="postsList"></div>
@@ -409,36 +337,582 @@
                     <div class="settings-item"><span class="settings-label"></span><button class="settings-btn" onclick="changePassword()">保存密码</button></div>
                 </div>
                 <div class="settings-section">
-                    <h3 class="settings-title">📦 数据管理</h3>
-                    <div class="settings-item"><span class="settings-label">导出数据</span><button class="settings-btn" onclick="exportData()">导出备份</button></div>
-                    <div class="settings-item"><span class="settings-label">导入数据</span><input type="file" id="importInput" class="hidden-input" accept=".json" onchange="importData(this)"><button class="settings-btn" onclick="document.getElementById('importInput').click()">选择文件</button></div>
-                    <div class="settings-item"><span class="settings-label">清空所有数据</span><button class="settings-btn danger" onclick="clearAllData()">清空数据</button></div>
+                    <h3 class="settings-title">☁️ 云端同步</h3>
+                    <div class="settings-item"><span class="settings-label">同步状态</span><span id="syncInfo">已连接云端</span></div>
+                    <div class="settings-item"><span class="settings-label">手动同步</span><button class="settings-btn" onclick="manualSync()">立即同步</button></div>
                 </div>
             </div>
         </div>
-        <footer class="footer">用 <span class="footer-heart">❤️</span> 记录我们的每一天</footer>
+        <footer class="footer">用 <span class="footer-heart">❤️</span> 记录我们的每一天<br><small style="opacity:0.6">☁️ 数据已云端同步</small></footer>
     </div>
     <div class="lightbox" id="lightbox" onclick="closeLightbox()"><img id="lightboxImg" src="" alt=""></div>
+    <div class="loading-overlay" id="loadingOverlay"><div class="loading-spinner"></div></div>
+
     <script>
-        const DEFAULT_PASSWORD = '520';
-        const KEYS = { password: 'loveSpace_password', startDate: 'loveSpace_startDate', name1: 'loveSpace_name1', name2: 'loveSpace_name2', avatar1: 'loveSpace_avatar1', avatar2: 'loveSpace_avatar2', photos: 'loveSpace_photos', diaries: 'loveSpace_diaries', wishes: 'loveSpace_wishes', posts: 'loveSpace_posts', theme: 'loveSpace_theme', fallingType: 'loveSpace_fallingType' };
-        let fallingType = localStorage.getItem(KEYS.fallingType) || 'hearts';
-        let fallingInterval;
+        // ==================== Supabase 配置 ====================
+        const SUPABASE_URL = 'https://qzsnxxvjxzvgnzaliwsa.supabase.co';
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InF6c254eHZqeHp2Z256YWxpd3NhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzg4MzIzNDAsImV4cCI6MjA1NDQwODM0MH0.lPpGKczgN2rxMjUHqgKJYG_x9BiqxCqPmV9XL6xH5jk';
+        
+        // Supabase API 辅助函数
+        async function supabaseRequest(table, method = 'GET', body = null, query = '') {
+            const url = `${SUPABASE_URL}/rest/v1/${table}${query}`;
+            const options = {
+                method,
+                headers: {
+                    'apikey': SUPABASE_KEY,
+                    'Authorization': `Bearer ${SUPABASE_KEY}`,
+                    'Content-Type': 'application/json',
+                    'Prefer': method === 'POST' ? 'return=representation' : (method === 'PATCH' ? 'return=representation' : '')
+                }
+            };
+            if (body) options.body = JSON.stringify(body);
+            
+            try {
+                const res = await fetch(url, options);
+                if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                const text = await res.text();
+                return text ? JSON.parse(text) : null;
+            } catch (err) {
+                console.error('Supabase error:', err);
+                throw err;
+            }
+        }
+
+        // ==================== 全局变量 ====================
+        let config = { password: '520', start_date: '', name1: '', name2: '', avatar1: '', avatar2: '' };
+        let posts = [];
+        let photos = [];
+        let diaries = [];
+        let wishes = [];
         let pendingPostImages = [];
         let currentFilter = 'all';
+        let fallingType = localStorage.getItem('fallingType') || 'hearts';
+        let fallingInterval;
 
-        document.addEventListener('DOMContentLoaded', () => {
+        // ==================== 初始化 ====================
+        document.addEventListener('DOMContentLoaded', async () => {
             createStars();
-            const savedTheme = localStorage.getItem(KEYS.theme) || 'day';
-            if (savedTheme === 'night') { document.body.setAttribute('data-theme', 'night'); document.getElementById('btnTheme').textContent = '☀️'; }
+            initTheme();
             updateFallingButtons();
             startFalling();
             initCursorTrail();
+            
             document.getElementById('passwordInput').addEventListener('keypress', (e) => { if (e.key === 'Enter') tryLogin(); });
             document.getElementById('wishInput').addEventListener('keypress', (e) => { if (e.key === 'Enter') addWish(); });
-            if (sessionStorage.getItem('loveSpace_loggedIn')) showApp();
+            
+            // 加载云端配置检查密码
+            await loadConfig();
+            
+            if (sessionStorage.getItem('loveSpace_loggedIn')) {
+                showApp();
+            }
         });
 
+        // ==================== 同步状态显示 ====================
+        function setSyncStatus(status, text) {
+            const el = document.getElementById('syncStatus');
+            el.className = 'sync-status ' + status;
+            el.querySelector('span').textContent = text;
+        }
+
+        function showLoading() { document.getElementById('loadingOverlay').classList.add('active'); }
+        function hideLoading() { document.getElementById('loadingOverlay').classList.remove('active'); }
+
+        // ==================== 云端数据操作 ====================
+        async function loadConfig() {
+            try {
+                setSyncStatus('syncing', '同步中...');
+                const data = await supabaseRequest('config', 'GET', null, '?id=eq.main');
+                if (data && data.length > 0) {
+                    config = { ...config, ...data[0] };
+                }
+                setSyncStatus('synced', '已同步');
+            } catch (err) {
+                setSyncStatus('error', '同步失败');
+                console.error('Load config error:', err);
+            }
+        }
+
+        async function saveConfig() {
+            config.name1 = document.getElementById('name1').value;
+            config.name2 = document.getElementById('name2').value;
+            config.start_date = document.getElementById('startDate').value;
+            
+            try {
+                setSyncStatus('syncing', '保存中...');
+                await supabaseRequest('config', 'PATCH', {
+                    name1: config.name1,
+                    name2: config.name2,
+                    start_date: config.start_date,
+                    avatar1: config.avatar1,
+                    avatar2: config.avatar2,
+                    updated_at: new Date().toISOString()
+                }, '?id=eq.main');
+                setSyncStatus('synced', '已同步');
+            } catch (err) {
+                setSyncStatus('error', '保存失败');
+            }
+        }
+
+        async function loadAllData() {
+            showLoading();
+            try {
+                setSyncStatus('syncing', '加载数据...');
+                
+                // 并行加载所有数据
+                const [postsData, photosData, diariesData, wishesData] = await Promise.all([
+                    supabaseRequest('posts', 'GET', null, '?order=created_at.desc'),
+                    supabaseRequest('photos', 'GET', null, '?order=created_at.desc'),
+                    supabaseRequest('diaries', 'GET', null, '?order=created_at.desc'),
+                    supabaseRequest('wishes', 'GET', null, '?order=created_at.asc')
+                ]);
+                
+                posts = postsData || [];
+                photos = photosData || [];
+                diaries = diariesData || [];
+                wishes = wishesData || [];
+                
+                // 渲染界面
+                renderConfig();
+                loadPosts();
+                loadPhotos();
+                loadDiaries();
+                loadWishes();
+                updatePostAvatar();
+                
+                setSyncStatus('synced', '已同步');
+            } catch (err) {
+                setSyncStatus('error', '加载失败');
+                console.error('Load all data error:', err);
+            }
+            hideLoading();
+        }
+
+        function renderConfig() {
+            document.getElementById('name1').value = config.name1 || '';
+            document.getElementById('name2').value = config.name2 || '';
+            document.getElementById('startDate').value = config.start_date || '';
+            
+            if (config.avatar1) document.getElementById('avatar1').innerHTML = '<img src="' + config.avatar1 + '">';
+            if (config.avatar2) document.getElementById('avatar2').innerHTML = '<img src="' + config.avatar2 + '">';
+        }
+
+        // ==================== 登录 ====================
+        async function tryLogin() {
+            const input = document.getElementById('passwordInput').value;
+            if (input === config.password) {
+                sessionStorage.setItem('loveSpace_loggedIn', 'true');
+                showApp();
+            } else {
+                document.getElementById('loginError').classList.add('show');
+                document.getElementById('passwordInput').value = '';
+                setTimeout(() => document.getElementById('loginError').classList.remove('show'), 2000);
+            }
+        }
+
+        async function showApp() {
+            document.getElementById('loginScreen').classList.add('hidden');
+            document.getElementById('app').classList.add('active');
+            await loadAllData();
+            startTimer();
+        }
+
+        // ==================== 说说功能 ====================
+        function updatePostAvatar() {
+            const author = document.getElementById('postAuthor').value;
+            const avatarEl = document.getElementById('postAvatar');
+            const savedAvatar = author === '1' ? config.avatar1 : config.avatar2;
+            avatarEl.innerHTML = savedAvatar ? '<img src="' + savedAvatar + '">' : (author === '1' ? '👦' : '👧');
+        }
+
+        function previewPostImages(input) {
+            Array.from(input.files).forEach(file => {
+                const reader = new FileReader();
+                reader.onload = (e) => { 
+                    // 压缩图片
+                    compressImage(e.target.result, 800, 0.8).then(compressed => {
+                        pendingPostImages.push(compressed);
+                        renderPostImagePreview();
+                    });
+                };
+                reader.readAsDataURL(file);
+            });
+            input.value = '';
+        }
+
+        function renderPostImagePreview() {
+            document.getElementById('postImagePreview').innerHTML = pendingPostImages.map((img, i) => 
+                '<div class="preview-item"><img src="' + img + '"><button class="preview-remove" onclick="removePostImage(' + i + ')">×</button></div>'
+            ).join('');
+        }
+
+        function removePostImage(index) { pendingPostImages.splice(index, 1); renderPostImagePreview(); }
+
+        async function publishPost() {
+            const content = document.getElementById('postContent').value.trim();
+            if (!content && pendingPostImages.length === 0) return;
+            
+            const btn = document.getElementById('postSubmitBtn');
+            btn.disabled = true;
+            btn.textContent = '发布中...';
+            
+            try {
+                setSyncStatus('syncing', '发布中...');
+                const author = document.getElementById('postAuthor').value;
+                
+                await supabaseRequest('posts', 'POST', {
+                    author,
+                    content,
+                    images: pendingPostImages,
+                    likes: 0,
+                    liked: false
+                });
+                
+                document.getElementById('postContent').value = '';
+                pendingPostImages = [];
+                document.getElementById('postImagePreview').innerHTML = '';
+                
+                // 重新加载说说
+                const postsData = await supabaseRequest('posts', 'GET', null, '?order=created_at.desc');
+                posts = postsData || [];
+                loadPosts();
+                
+                setSyncStatus('synced', '已同步');
+            } catch (err) {
+                setSyncStatus('error', '发布失败');
+                alert('发布失败，请重试');
+            }
+            
+            btn.disabled = false;
+            btn.textContent = '发布说说 💌';
+        }
+
+        function loadPosts() {
+            document.getElementById('postsList').innerHTML = posts.map(post => {
+                const name = post.author === '1' ? (config.name1 || '他') : (config.name2 || '她');
+                const avatar = post.author === '1' ? config.avatar1 : config.avatar2;
+                const date = new Date(post.created_at).toLocaleString('zh-CN');
+                
+                let imagesHtml = '';
+                if (post.images && post.images.length > 0) {
+                    const gridClass = post.images.length === 1 ? 'single' : (post.images.length === 2 ? 'double' : '');
+                    imagesHtml = '<div class="post-item-images ' + gridClass + '">' + 
+                        post.images.map(img => '<img src="' + img + '" onclick="openLightbox(\'' + img.replace(/'/g, "\\'") + '\')">').join('') + '</div>';
+                }
+                
+                return '<div class="post-item"><div class="post-item-header"><div class="post-item-avatar">' + 
+                    (avatar ? '<img src="' + avatar + '">' : (post.author === '1' ? '👦' : '👧')) + 
+                    '</div><div class="post-item-info"><div class="post-item-name">' + name + '</div><div class="post-item-date">' + date + 
+                    '</div></div><button class="post-item-delete" onclick="deletePost(' + post.id + ')">×</button></div>' + 
+                    (post.content ? '<div class="post-item-content">' + escapeHtml(post.content) + '</div>' : '') + imagesHtml + 
+                    '<div class="post-item-footer"><button class="post-action-btn ' + (post.liked ? 'liked' : '') + 
+                    '" onclick="toggleLike(' + post.id + ')">' + (post.liked ? '❤️' : '🤍') + ' <span>' + post.likes + '</span></button></div></div>';
+            }).join('');
+        }
+
+        async function toggleLike(postId) {
+            const post = posts.find(p => p.id === postId);
+            if (!post) return;
+            
+            const newLiked = !post.liked;
+            const newLikes = post.likes + (newLiked ? 1 : -1);
+            
+            try {
+                await supabaseRequest('posts', 'PATCH', { liked: newLiked, likes: newLikes }, '?id=eq.' + postId);
+                post.liked = newLiked;
+                post.likes = newLikes;
+                loadPosts();
+            } catch (err) {
+                console.error('Toggle like error:', err);
+            }
+        }
+
+        async function deletePost(postId) {
+            if (!confirm('确定删除这条说说吗？')) return;
+            try {
+                setSyncStatus('syncing', '删除中...');
+                await supabaseRequest('posts', 'DELETE', null, '?id=eq.' + postId);
+                posts = posts.filter(p => p.id !== postId);
+                loadPosts();
+                setSyncStatus('synced', '已同步');
+            } catch (err) {
+                setSyncStatus('error', '删除失败');
+            }
+        }
+
+        // ==================== 相册功能 ====================
+        function loadPhotos() {
+            const filtered = currentFilter === 'all' ? photos : photos.filter(p => p.category === currentFilter);
+            const grid = document.getElementById('albumGrid');
+            const empty = document.getElementById('albumEmpty');
+            
+            if (filtered.length === 0) { grid.style.display = 'none'; empty.style.display = 'block'; return; }
+            grid.style.display = 'block'; empty.style.display = 'none';
+            
+            const categoryNames = { daily: '日常', date: '约会', travel: '旅行', food: '美食' };
+            grid.innerHTML = filtered.map(photo => 
+                '<div class="masonry-item"><img src="' + photo.src + '" onclick="openLightbox(\'' + photo.src.replace(/'/g, "\\'") + 
+                '\')"><span class="photo-category">' + (categoryNames[photo.category] || '日常') + 
+                '</span><button class="photo-delete" onclick="deletePhoto(' + photo.id + ', event)">×</button></div>'
+            ).join('');
+        }
+
+        function filterAlbum(category, btn) {
+            currentFilter = category;
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            loadPhotos();
+        }
+
+        async function uploadPhotos(input) {
+            const category = document.getElementById('albumCategory').value;
+            showLoading();
+            
+            for (const file of input.files) {
+                try {
+                    const dataUrl = await readFileAsDataURL(file);
+                    const compressed = await compressImage(dataUrl, 1200, 0.8);
+                    
+                    setSyncStatus('syncing', '上传中...');
+                    await supabaseRequest('photos', 'POST', { src: compressed, category });
+                } catch (err) {
+                    console.error('Upload photo error:', err);
+                }
+            }
+            
+            // 重新加载相册
+            const photosData = await supabaseRequest('photos', 'GET', null, '?order=created_at.desc');
+            photos = photosData || [];
+            loadPhotos();
+            setSyncStatus('synced', '已同步');
+            hideLoading();
+            input.value = '';
+        }
+
+        async function deletePhoto(photoId, e) {
+            e.stopPropagation();
+            if (!confirm('确定删除这张照片吗？')) return;
+            try {
+                setSyncStatus('syncing', '删除中...');
+                await supabaseRequest('photos', 'DELETE', null, '?id=eq.' + photoId);
+                photos = photos.filter(p => p.id !== photoId);
+                loadPhotos();
+                setSyncStatus('synced', '已同步');
+            } catch (err) {
+                setSyncStatus('error', '删除失败');
+            }
+        }
+
+        // ==================== 日记功能 ====================
+        function loadDiaries() {
+            document.getElementById('diaryList').innerHTML = diaries.map(diary => {
+                const date = new Date(diary.created_at).toLocaleString('zh-CN');
+                return '<div class="diary-entry"><button class="delete-btn" onclick="deleteDiary(' + diary.id + ')">×</button>' +
+                    '<div class="diary-date">' + date + '</div><div class="diary-content">' + escapeHtml(diary.content) + '</div></div>';
+            }).join('');
+        }
+
+        async function addDiary() {
+            const content = document.getElementById('diaryInput').value.trim();
+            if (!content) return;
+            
+            try {
+                setSyncStatus('syncing', '保存中...');
+                await supabaseRequest('diaries', 'POST', { content });
+                document.getElementById('diaryInput').value = '';
+                
+                const diariesData = await supabaseRequest('diaries', 'GET', null, '?order=created_at.desc');
+                diaries = diariesData || [];
+                loadDiaries();
+                setSyncStatus('synced', '已同步');
+            } catch (err) {
+                setSyncStatus('error', '保存失败');
+            }
+        }
+
+        async function deleteDiary(diaryId) {
+            if (!confirm('确定删除这篇日记吗？')) return;
+            try {
+                setSyncStatus('syncing', '删除中...');
+                await supabaseRequest('diaries', 'DELETE', null, '?id=eq.' + diaryId);
+                diaries = diaries.filter(d => d.id !== diaryId);
+                loadDiaries();
+                setSyncStatus('synced', '已同步');
+            } catch (err) {
+                setSyncStatus('error', '删除失败');
+            }
+        }
+
+        // ==================== 清单功能 ====================
+        function loadWishes() {
+            document.getElementById('wishList').innerHTML = wishes.map(wish => 
+                '<div class="wishlist-item ' + (wish.completed ? 'completed' : '') + '">' +
+                '<div class="wishlist-checkbox ' + (wish.completed ? 'checked' : '') + '" onclick="toggleWish(' + wish.id + ')">' + 
+                (wish.completed ? '✓' : '') + '</div><span class="wishlist-text">' + escapeHtml(wish.text) + 
+                '</span><button class="wishlist-delete" onclick="deleteWish(' + wish.id + ')">×</button></div>'
+            ).join('');
+        }
+
+        async function addWish() {
+            const text = document.getElementById('wishInput').value.trim();
+            if (!text) return;
+            
+            try {
+                setSyncStatus('syncing', '保存中...');
+                await supabaseRequest('wishes', 'POST', { text, completed: false });
+                document.getElementById('wishInput').value = '';
+                
+                const wishesData = await supabaseRequest('wishes', 'GET', null, '?order=created_at.asc');
+                wishes = wishesData || [];
+                loadWishes();
+                setSyncStatus('synced', '已同步');
+            } catch (err) {
+                setSyncStatus('error', '保存失败');
+            }
+        }
+
+        async function toggleWish(wishId) {
+            const wish = wishes.find(w => w.id === wishId);
+            if (!wish) return;
+            
+            try {
+                await supabaseRequest('wishes', 'PATCH', { completed: !wish.completed }, '?id=eq.' + wishId);
+                wish.completed = !wish.completed;
+                loadWishes();
+            } catch (err) {
+                console.error('Toggle wish error:', err);
+            }
+        }
+
+        async function deleteWish(wishId) {
+            try {
+                setSyncStatus('syncing', '删除中...');
+                await supabaseRequest('wishes', 'DELETE', null, '?id=eq.' + wishId);
+                wishes = wishes.filter(w => w.id !== wishId);
+                loadWishes();
+                setSyncStatus('synced', '已同步');
+            } catch (err) {
+                setSyncStatus('error', '删除失败');
+            }
+        }
+
+        // ==================== 设置功能 ====================
+        async function changePassword() {
+            const newPassword = document.getElementById('newPassword').value;
+            if (!newPassword) { alert('请输入新密码'); return; }
+            
+            try {
+                setSyncStatus('syncing', '保存中...');
+                await supabaseRequest('config', 'PATCH', { password: newPassword }, '?id=eq.main');
+                config.password = newPassword;
+                document.getElementById('newPassword').value = '';
+                alert('密码修改成功！');
+                setSyncStatus('synced', '已同步');
+            } catch (err) {
+                setSyncStatus('error', '保存失败');
+                alert('修改失败，请重试');
+            }
+        }
+
+        async function manualSync() {
+            await loadAllData();
+            alert('同步完成！');
+        }
+
+        // ==================== 头像上传 ====================
+        async function uploadAvatar(num, input) {
+            const file = input.files[0];
+            if (!file) return;
+            
+            showLoading();
+            try {
+                const dataUrl = await readFileAsDataURL(file);
+                const compressed = await compressImage(dataUrl, 300, 0.8);
+                
+                document.getElementById('avatar' + num).innerHTML = '<img src="' + compressed + '">';
+                config['avatar' + num] = compressed;
+                
+                await saveConfig();
+            } catch (err) {
+                console.error('Upload avatar error:', err);
+            }
+            hideLoading();
+        }
+
+        // ==================== 工具函数 ====================
+        function readFileAsDataURL(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = e => resolve(e.target.result);
+                reader.onerror = reject;
+                reader.readAsDataURL(file);
+            });
+        }
+
+        function compressImage(dataUrl, maxSize, quality) {
+            return new Promise((resolve) => {
+                const img = new Image();
+                img.onload = () => {
+                    const canvas = document.createElement('canvas');
+                    let width = img.width;
+                    let height = img.height;
+                    
+                    if (width > maxSize || height > maxSize) {
+                        if (width > height) {
+                            height = (height / width) * maxSize;
+                            width = maxSize;
+                        } else {
+                            width = (width / height) * maxSize;
+                            height = maxSize;
+                        }
+                    }
+                    
+                    canvas.width = width;
+                    canvas.height = height;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, width, height);
+                    resolve(canvas.toDataURL('image/jpeg', quality));
+                };
+                img.src = dataUrl;
+            });
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // ==================== 计时器 ====================
+        function startTimer() {
+            function update() {
+                const startDate = config.start_date;
+                if (!startDate) { document.getElementById('timerDays').textContent = '?'; return; }
+                const diff = new Date() - new Date(startDate);
+                if (diff < 0) { 
+                    document.getElementById('timerDays').textContent = '0';
+                    document.getElementById('timerHours').textContent = '0';
+                    document.getElementById('timerMinutes').textContent = '0';
+                    document.getElementById('timerSeconds').textContent = '0';
+                    return;
+                }
+                document.getElementById('timerDays').textContent = Math.floor(diff / 86400000);
+                document.getElementById('timerHours').textContent = Math.floor((diff % 86400000) / 3600000);
+                document.getElementById('timerMinutes').textContent = Math.floor((diff % 3600000) / 60000);
+                document.getElementById('timerSeconds').textContent = Math.floor((diff % 60000) / 1000);
+            }
+            update();
+            setInterval(update, 1000);
+        }
+
+        function switchTab(tabName, btn) {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            btn.classList.add('active');
+            document.getElementById('tab-' + tabName).classList.add('active');
+        }
+
+        // ==================== 主题和特效 ====================
         function createStars() {
             const container = document.getElementById('stars');
             for (let i = 0; i < 100; i++) {
@@ -450,6 +924,27 @@
                 star.style.height = star.style.width;
                 star.style.animationDelay = Math.random() * 2 + 's';
                 container.appendChild(star);
+            }
+        }
+
+        function initTheme() {
+            const savedTheme = localStorage.getItem('theme') || 'day';
+            if (savedTheme === 'night') {
+                document.body.setAttribute('data-theme', 'night');
+                document.getElementById('btnTheme').textContent = '☀️';
+            }
+        }
+
+        function toggleTheme() {
+            const isNight = document.body.getAttribute('data-theme') === 'night';
+            if (isNight) {
+                document.body.removeAttribute('data-theme');
+                document.getElementById('btnTheme').textContent = '🌙';
+                localStorage.setItem('theme', 'day');
+            } else {
+                document.body.setAttribute('data-theme', 'night');
+                document.getElementById('btnTheme').textContent = '☀️';
+                localStorage.setItem('theme', 'night');
             }
         }
 
@@ -471,12 +966,15 @@
             setTimeout(() => item.remove(), 7000);
         }
 
-        function setFallingType(type) { fallingType = type; localStorage.setItem(KEYS.fallingType, type); updateFallingButtons(); }
-        function updateFallingButtons() { document.getElementById('btnHearts').classList.toggle('active', fallingType === 'hearts'); document.getElementById('btnPetals').classList.toggle('active', fallingType === 'petals'); }
-        function toggleTheme() {
-            const isNight = document.body.getAttribute('data-theme') === 'night';
-            if (isNight) { document.body.removeAttribute('data-theme'); document.getElementById('btnTheme').textContent = '🌙'; localStorage.setItem(KEYS.theme, 'day'); }
-            else { document.body.setAttribute('data-theme', 'night'); document.getElementById('btnTheme').textContent = '☀️'; localStorage.setItem(KEYS.theme, 'night'); }
+        function setFallingType(type) {
+            fallingType = type;
+            localStorage.setItem('fallingType', type);
+            updateFallingButtons();
+        }
+
+        function updateFallingButtons() {
+            document.getElementById('btnHearts').classList.toggle('active', fallingType === 'hearts');
+            document.getElementById('btnPetals').classList.toggle('active', fallingType === 'petals');
         }
 
         function initCursorTrail() {
@@ -495,194 +993,15 @@
             });
         }
 
-        function tryLogin() {
-            const input = document.getElementById('passwordInput').value;
-            const savedPassword = localStorage.getItem(KEYS.password) || DEFAULT_PASSWORD;
-            if (input === savedPassword) { sessionStorage.setItem('loveSpace_loggedIn', 'true'); showApp(); }
-            else { document.getElementById('loginError').classList.add('show'); document.getElementById('passwordInput').value = ''; setTimeout(() => document.getElementById('loginError').classList.remove('show'), 2000); }
+        function openLightbox(src) {
+            document.getElementById('lightboxImg').src = src;
+            document.getElementById('lightbox').classList.add('active');
         }
 
-        function showApp() { document.getElementById('loginScreen').classList.add('hidden'); document.getElementById('app').classList.add('active'); loadAllData(); startTimer(); }
-
-        function loadAllData() {
-            document.getElementById('name1').value = localStorage.getItem(KEYS.name1) || '';
-            document.getElementById('name2').value = localStorage.getItem(KEYS.name2) || '';
-            const avatar1 = localStorage.getItem(KEYS.avatar1);
-            const avatar2 = localStorage.getItem(KEYS.avatar2);
-            if (avatar1) document.getElementById('avatar1').innerHTML = '<img src="' + avatar1 + '">';
-            if (avatar2) document.getElementById('avatar2').innerHTML = '<img src="' + avatar2 + '">';
-            const startDate = localStorage.getItem(KEYS.startDate);
-            if (startDate) document.getElementById('startDate').value = startDate;
-            loadPosts(); loadPhotos(); loadDiaries(); loadWishes(); updatePostAvatar();
+        function closeLightbox() {
+            document.getElementById('lightbox').classList.remove('active');
         }
 
-        function saveName(num) { localStorage.setItem(KEYS['name' + num], document.getElementById('name' + num).value); }
-        function uploadAvatar(num, input) {
-            const file = input.files[0];
-            if (!file) return;
-            const reader = new FileReader();
-            reader.onload = (e) => { document.getElementById('avatar' + num).innerHTML = '<img src="' + e.target.result + '">'; localStorage.setItem(KEYS['avatar' + num], e.target.result); };
-            reader.readAsDataURL(file);
-        }
-        function saveStartDate() { localStorage.setItem(KEYS.startDate, document.getElementById('startDate').value); }
-
-        function startTimer() {
-            function update() {
-                const startDate = localStorage.getItem(KEYS.startDate);
-                if (!startDate) { document.getElementById('timerDays').textContent = '?'; return; }
-                const diff = new Date() - new Date(startDate);
-                if (diff < 0) { document.getElementById('timerDays').textContent = '0'; document.getElementById('timerHours').textContent = '0'; document.getElementById('timerMinutes').textContent = '0'; document.getElementById('timerSeconds').textContent = '0'; return; }
-                document.getElementById('timerDays').textContent = Math.floor(diff / 86400000);
-                document.getElementById('timerHours').textContent = Math.floor((diff % 86400000) / 3600000);
-                document.getElementById('timerMinutes').textContent = Math.floor((diff % 3600000) / 60000);
-                document.getElementById('timerSeconds').textContent = Math.floor((diff % 60000) / 1000);
-            }
-            update(); setInterval(update, 1000);
-        }
-
-        function switchTab(tabName, btn) {
-            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-            btn.classList.add('active');
-            document.getElementById('tab-' + tabName).classList.add('active');
-        }
-
-        function updatePostAvatar() {
-            const author = document.getElementById('postAuthor').value;
-            const avatarEl = document.getElementById('postAvatar');
-            const savedAvatar = localStorage.getItem(KEYS['avatar' + author]);
-            avatarEl.innerHTML = savedAvatar ? '<img src="' + savedAvatar + '">' : (author === '1' ? '👦' : '👧');
-        }
-
-        function previewPostImages(input) {
-            Array.from(input.files).forEach(file => {
-                const reader = new FileReader();
-                reader.onload = (e) => { pendingPostImages.push(e.target.result); renderPostImagePreview(); };
-                reader.readAsDataURL(file);
-            });
-            input.value = '';
-        }
-
-        function renderPostImagePreview() {
-            document.getElementById('postImagePreview').innerHTML = pendingPostImages.map((img, i) => '<div class="preview-item"><img src="' + img + '"><button class="preview-remove" onclick="removePostImage(' + i + ')">×</button></div>').join('');
-        }
-        function removePostImage(index) { pendingPostImages.splice(index, 1); renderPostImagePreview(); }
-
-        function publishPost() {
-            const content = document.getElementById('postContent').value.trim();
-            if (!content && pendingPostImages.length === 0) return;
-            const author = document.getElementById('postAuthor').value;
-            const posts = JSON.parse(localStorage.getItem(KEYS.posts) || '[]');
-            const now = new Date();
-            posts.unshift({ id: Date.now(), author, content, images: [...pendingPostImages], date: now.getFullYear() + '年' + (now.getMonth() + 1) + '月' + now.getDate() + '日 ' + now.getHours() + ':' + String(now.getMinutes()).padStart(2, '0'), likes: 0, liked: false });
-            localStorage.setItem(KEYS.posts, JSON.stringify(posts));
-            document.getElementById('postContent').value = '';
-            pendingPostImages = [];
-            document.getElementById('postImagePreview').innerHTML = '';
-            loadPosts();
-        }
-
-        function loadPosts() {
-            const posts = JSON.parse(localStorage.getItem(KEYS.posts) || '[]');
-            document.getElementById('postsList').innerHTML = posts.map(post => {
-                const name = localStorage.getItem(KEYS['name' + post.author]) || (post.author === '1' ? '他' : '她');
-                const avatar = localStorage.getItem(KEYS['avatar' + post.author]);
-                let imagesHtml = '';
-                if (post.images && post.images.length > 0) {
-                    const gridClass = post.images.length === 1 ? 'single' : (post.images.length === 2 ? 'double' : '');
-                    imagesHtml = '<div class="post-item-images ' + gridClass + '">' + post.images.map(img => '<img src="' + img + '" onclick="openLightbox(\'' + img + '\')">').join('') + '</div>';
-                }
-                return '<div class="post-item"><div class="post-item-header"><div class="post-item-avatar">' + (avatar ? '<img src="' + avatar + '">' : (post.author === '1' ? '👦' : '👧')) + '</div><div class="post-item-info"><div class="post-item-name">' + name + '</div><div class="post-item-date">' + post.date + '</div></div><button class="post-item-delete" onclick="deletePost(' + post.id + ')">×</button></div>' + (post.content ? '<div class="post-item-content">' + post.content + '</div>' : '') + imagesHtml + '<div class="post-item-footer"><button class="post-action-btn ' + (post.liked ? 'liked' : '') + '" onclick="toggleLike(' + post.id + ')">' + (post.liked ? '❤️' : '🤍') + ' <span>' + post.likes + '</span></button></div></div>';
-            }).join('');
-        }
-
-        function toggleLike(postId) {
-            const posts = JSON.parse(localStorage.getItem(KEYS.posts) || '[]');
-            const post = posts.find(p => p.id === postId);
-            if (post) { post.liked = !post.liked; post.likes += post.liked ? 1 : -1; localStorage.setItem(KEYS.posts, JSON.stringify(posts)); loadPosts(); }
-        }
-        function deletePost(postId) { if (!confirm('确定删除这条说说吗？')) return; const posts = JSON.parse(localStorage.getItem(KEYS.posts) || '[]'); const index = posts.findIndex(p => p.id === postId); if (index > -1) { posts.splice(index, 1); localStorage.setItem(KEYS.posts, JSON.stringify(posts)); loadPosts(); } }
-
-        function loadPhotos() {
-            const photos = JSON.parse(localStorage.getItem(KEYS.photos) || '[]');
-            const grid = document.getElementById('albumGrid');
-            const empty = document.getElementById('albumEmpty');
-            const filtered = currentFilter === 'all' ? photos : photos.filter(p => p.category === currentFilter);
-            if (filtered.length === 0) { grid.style.display = 'none'; empty.style.display = 'block'; return; }
-            grid.style.display = 'block'; empty.style.display = 'none';
-            const categoryNames = { daily: '日常', date: '约会', travel: '旅行', food: '美食' };
-            grid.innerHTML = filtered.map((photo, index) => '<div class="masonry-item"><img src="' + photo.src + '" onclick="openLightbox(\'' + photo.src + '\')"><span class="photo-category">' + (categoryNames[photo.category] || '日常') + '</span><button class="photo-delete" onclick="deletePhoto(' + index + ', event)">×</button></div>').join('');
-        }
-
-        function filterAlbum(category, btn) { currentFilter = category; document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active'); loadPhotos(); }
-        function uploadPhotos(input) {
-            const category = document.getElementById('albumCategory').value;
-            const photos = JSON.parse(localStorage.getItem(KEYS.photos) || '[]');
-            Array.from(input.files).forEach(file => {
-                const reader = new FileReader();
-                reader.onload = (e) => { photos.unshift({ src: e.target.result, category: category, date: new Date().toISOString() }); localStorage.setItem(KEYS.photos, JSON.stringify(photos)); loadPhotos(); };
-                reader.readAsDataURL(file);
-            });
-            input.value = '';
-        }
-        function deletePhoto(index, e) {
-            e.stopPropagation();
-            if (!confirm('确定删除这张照片吗？')) return;
-            const photos = JSON.parse(localStorage.getItem(KEYS.photos) || '[]');
-            const filtered = currentFilter === 'all' ? photos : photos.filter(p => p.category === currentFilter);
-            const photoToDelete = filtered[index];
-            const realIndex = photos.findIndex(p => p.src === photoToDelete.src && p.date === photoToDelete.date);
-            if (realIndex > -1) { photos.splice(realIndex, 1); localStorage.setItem(KEYS.photos, JSON.stringify(photos)); loadPhotos(); }
-        }
-        function openLightbox(src) { document.getElementById('lightboxImg').src = src; document.getElementById('lightbox').classList.add('active'); }
-        function closeLightbox() { document.getElementById('lightbox').classList.remove('active'); }
-
-        function loadDiaries() {
-            const diaries = JSON.parse(localStorage.getItem(KEYS.diaries) || '[]');
-            document.getElementById('diaryList').innerHTML = diaries.map((diary, index) => '<div class="diary-entry"><button class="delete-btn" onclick="deleteDiary(' + index + ')">×</button><div class="diary-date">' + diary.date + '</div><div class="diary-content">' + diary.content + '</div></div>').join('');
-        }
-        function addDiary() {
-            const content = document.getElementById('diaryInput').value.trim();
-            if (!content) return;
-            const diaries = JSON.parse(localStorage.getItem(KEYS.diaries) || '[]');
-            const now = new Date();
-            diaries.unshift({ date: now.getFullYear() + '年' + (now.getMonth() + 1) + '月' + now.getDate() + '日 ' + now.getHours() + ':' + String(now.getMinutes()).padStart(2, '0'), content });
-            localStorage.setItem(KEYS.diaries, JSON.stringify(diaries));
-            document.getElementById('diaryInput').value = '';
-            loadDiaries();
-        }
-        function deleteDiary(index) { if (!confirm('确定删除这篇日记吗？')) return; const diaries = JSON.parse(localStorage.getItem(KEYS.diaries) || '[]'); diaries.splice(index, 1); localStorage.setItem(KEYS.diaries, JSON.stringify(diaries)); loadDiaries(); }
-
-        function loadWishes() {
-            const wishes = JSON.parse(localStorage.getItem(KEYS.wishes) || '[]');
-            document.getElementById('wishList').innerHTML = wishes.map((wish, index) => '<div class="wishlist-item ' + (wish.completed ? 'completed' : '') + '"><div class="wishlist-checkbox ' + (wish.completed ? 'checked' : '') + '" onclick="toggleWish(' + index + ')">' + (wish.completed ? '✓' : '') + '</div><span class="wishlist-text">' + wish.text + '</span><button class="wishlist-delete" onclick="deleteWish(' + index + ')">×</button></div>').join('');
-        }
-        function addWish() { const text = document.getElementById('wishInput').value.trim(); if (!text) return; const wishes = JSON.parse(localStorage.getItem(KEYS.wishes) || '[]'); wishes.push({ text, completed: false }); localStorage.setItem(KEYS.wishes, JSON.stringify(wishes)); document.getElementById('wishInput').value = ''; loadWishes(); }
-        function toggleWish(index) { const wishes = JSON.parse(localStorage.getItem(KEYS.wishes) || '[]'); wishes[index].completed = !wishes[index].completed; localStorage.setItem(KEYS.wishes, JSON.stringify(wishes)); loadWishes(); }
-        function deleteWish(index) { const wishes = JSON.parse(localStorage.getItem(KEYS.wishes) || '[]'); wishes.splice(index, 1); localStorage.setItem(KEYS.wishes, JSON.stringify(wishes)); loadWishes(); }
-
-        function changePassword() { const newPassword = document.getElementById('newPassword').value; if (!newPassword) { alert('请输入新密码'); return; } localStorage.setItem(KEYS.password, newPassword); document.getElementById('newPassword').value = ''; alert('密码修改成功！'); }
-        function exportData() {
-            const data = {};
-            Object.entries(KEYS).forEach(([key, value]) => { data[key] = localStorage.getItem(value); });
-            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a'); a.href = url; a.download = '我们的小窝_备份_' + new Date().toLocaleDateString() + '.json'; a.click();
-            URL.revokeObjectURL(url);
-        }
-        function importData(input) {
-            const file = input.files[0]; if (!file) return;
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                try {
-                    const data = JSON.parse(e.target.result);
-                    Object.entries(KEYS).forEach(([key, storageKey]) => { if (data[key]) localStorage.setItem(storageKey, data[key]); });
-                    alert('数据导入成功！页面将刷新'); location.reload();
-                } catch (err) { alert('导入失败，文件格式不正确'); }
-            };
-            reader.readAsText(file); input.value = '';
-        }
-        function clearAllData() { if (!confirm('确定要清空所有数据吗？此操作不可恢复！')) return; if (!confirm('真的要清空吗？所有照片、日记、说说都会丢失！')) return; Object.values(KEYS).forEach(key => localStorage.removeItem(key)); sessionStorage.removeItem('loveSpace_loggedIn'); location.reload(); }
         document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeLightbox(); });
     </script>
 </body>
