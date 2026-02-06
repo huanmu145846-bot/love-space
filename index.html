@@ -288,7 +288,7 @@
                 <button class="login-tab" onclick="switchLoginTab('visitor')">👀 访客</button>
             </div>
             <div class="login-form active" id="ownerLoginForm">
-                <select class="login-input" id="ownerSelect"><option value="他">他</option><option value="她">她</option></select>
+                <select class="login-input" id="ownerSelect"><option value="yhr">yhr 👦</option><option value="hhy">hhy 👧</option></select>
                 <input type="password" class="login-input" id="ownerPassword" placeholder="请输入密码">
                 <button class="login-btn" onclick="ownerLogin()">进入小窝 💕</button>
             </div>
@@ -441,10 +441,18 @@
                 <div class="settings-section">
                     <h3 class="settings-title">🔐 修改密码</h3>
                     <div class="settings-item">
+                        <span class="settings-label">旧密码</span>
+                        <input type="password" class="settings-input" id="oldPassword" placeholder="输入旧密码">
+                    </div>
+                    <div class="settings-item">
                         <span class="settings-label">新密码</span>
                         <input type="password" class="settings-input" id="newPassword" placeholder="输入新密码">
                     </div>
-                    <div class="settings-item"><span></span><button class="settings-btn" onclick="changePassword()">保存</button></div>
+                    <div class="settings-item">
+                        <span class="settings-label">确认密码</span>
+                        <input type="password" class="settings-input" id="confirmPassword" placeholder="再次输入新密码">
+                    </div>
+                    <div class="settings-item"><span></span><button class="settings-btn" onclick="changePassword()">修改密码</button></div>
                 </div>
                 <div class="settings-section">
                     <h3 class="settings-title">👀 访客管理</h3>
@@ -479,7 +487,7 @@
         }
 
         let currentUser = null;
-        let config = { start_date: '', name1: '他', name2: '她', avatar1: '', avatar2: '' };
+        let config = { start_date: '', name1: 'yhr', name2: 'hhy', avatar1: '', avatar2: '' };
         let posts = [], photos = [], diaries = [], wishes = [], users = [], comments = [], likes = [], messages = [];
         let pendingPostImages = [], currentFilter = 'all', replyTo = null;
         let fallingType = localStorage.getItem('fallingType') || 'hearts';
@@ -585,8 +593,8 @@
 
         function renderConfig() {
             document.getElementById('startDate').value = config.start_date || '';
-            document.getElementById('name1Display').textContent = config.name1 || '他';
-            document.getElementById('name2Display').textContent = config.name2 || '她';
+            document.getElementById('name1Display').textContent = config.name1 || 'yhr';
+            document.getElementById('name2Display').textContent = config.name2 || 'hhy';
             if (config.avatar1) document.getElementById('avatar1').innerHTML = `<img src="${config.avatar1}">`;
             if (config.avatar2) document.getElementById('avatar2').innerHTML = `<img src="${config.avatar2}">`;
             updateChatHeader();
@@ -600,8 +608,9 @@
 
         // ==================== 私聊功能 ====================
         function updateChatHeader() {
-            const partner = currentUser?.username === '他' || currentUser?.username === config.name1 ? config.name2 || '她' : config.name1 || '他';
-            const partnerAvatar = currentUser?.username === '他' || currentUser?.username === config.name1 ? config.avatar2 : config.avatar1;
+            const isYhr = currentUser?.username === 'yhr' || currentUser?.username === config.name1;
+            const partner = isYhr ? (config.name2 || 'hhy') : (config.name1 || 'yhr');
+            const partnerAvatar = isYhr ? config.avatar2 : config.avatar1;
             document.getElementById('chatPartnerName').textContent = `和${partner}的悄悄话`;
             document.getElementById('chatPartnerAvatar').innerHTML = partnerAvatar ? `<img src="${partnerAvatar}">` : '💕';
         }
@@ -622,8 +631,8 @@
                     lastDate = msgDate;
                 }
                 const isMine = msg.sender === currentUser?.username;
-                const isHe = msg.sender === '他' || msg.sender === config.name1;
-                const avatar = isHe ? config.avatar1 : config.avatar2;
+                const isName1 = msg.sender === 'yhr' || msg.sender === config.name1;
+                const avatar = isName1 ? config.avatar1 : config.avatar2;
                 const time = new Date(msg.created_at).toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' });
                 
                 let content = '';
@@ -631,7 +640,7 @@
                 else if (msg.content) content = escapeHtml(msg.content);
                 
                 html += `<div class="chat-message ${isMine ? 'mine' : ''}">
-                    <div class="chat-message-avatar">${avatar ? `<img src="${avatar}">` : (isHe ? '👦' : '👧')}</div>
+                    <div class="chat-message-avatar">${avatar ? `<img src="${avatar}">` : (isName1 ? '👦' : '👧')}</div>
                     <div class="chat-message-content">
                         <div class="chat-bubble">${content}</div>
                         <div class="chat-message-time">${time}</div>
@@ -715,8 +724,8 @@
         function loadPosts() {
             const isOwner = currentUser?.role === 'owner';
             document.getElementById('postsList').innerHTML = posts.map(post => {
-                const isHe = post.author === '他' || post.author === config.name1;
-                const avatar = isHe ? config.avatar1 : config.avatar2;
+                const isName1 = post.author === 'yhr' || post.author === config.name1;
+                const avatar = isName1 ? config.avatar1 : config.avatar2;
                 const date = new Date(post.created_at).toLocaleString('zh-CN');
                 const postLikes = likes.filter(l => l.post_id === post.id);
                 const isLiked = postLikes.some(l => l.username === currentUser?.username);
@@ -732,7 +741,7 @@
                     <div class="comments-list">${postComments.map(c => {
                         const replyComment = c.reply_to ? postComments.find(pc => pc.id === c.reply_to) : null;
                         return `<div class="comment-item">
-                            <div class="comment-avatar">${c.username === '他' || c.username === config.name1 ? '👦' : c.username === '她' || c.username === config.name2 ? '👧' : '👤'}</div>
+                            <div class="comment-avatar">${c.username === 'yhr' || c.username === config.name1 ? '👦' : c.username === 'hhy' || c.username === config.name2 ? '👧' : '👤'}</div>
                             <div class="comment-content">
                                 <div class="comment-header"><span class="comment-name">${escapeHtml(c.username)}</span><span class="comment-date">${new Date(c.created_at).toLocaleString('zh-CN')}</span></div>
                                 ${replyComment ? `<div class="comment-reply-to">回复 @${escapeHtml(replyComment.username)}</div>` : ''}
@@ -753,7 +762,7 @@
 
                 return `<div class="post-item">
                     <div class="post-item-header">
-                        <div class="post-item-avatar">${avatar ? `<img src="${avatar}">` : (isHe ? '👦' : '👧')}</div>
+                        <div class="post-item-avatar">${avatar ? `<img src="${avatar}">` : (isName1 ? '👦' : '👧')}</div>
                         <div class="post-item-info">
                             <div class="post-item-name">${escapeHtml(post.author)}<span class="role-badge owner">👑</span></div>
                             <div class="post-item-date">${date}</div>
@@ -874,9 +883,26 @@
         async function deleteVisitor(id) { if (!confirm('删除访客？')) return; try { await db('users', 'DELETE', null, `?id=eq.${id}`); users = users.filter(u => u.id !== id); loadVisitors(); } catch (e) { console.error(e); } }
 
         async function changePassword() {
-            const pwd = document.getElementById('newPassword').value;
-            if (!pwd) { alert('请输入新密码'); return; }
-            try { await db('users', 'PATCH', { password: pwd }, `?username=eq.${encodeURIComponent(currentUser.username)}`); document.getElementById('newPassword').value = ''; alert('密码修改成功！'); } catch (e) { alert('修改失败'); }
+            const oldPwd = document.getElementById('oldPassword').value;
+            const newPwd = document.getElementById('newPassword').value;
+            const confirmPwd = document.getElementById('confirmPassword').value;
+            
+            if (!oldPwd || !newPwd || !confirmPwd) { alert('请填写完整'); return; }
+            if (newPwd !== confirmPwd) { alert('两次输入的新密码不一致'); return; }
+            if (newPwd.length < 3) { alert('新密码至少3位'); return; }
+            
+            try {
+                // 验证旧密码
+                const u = await db('users', 'GET', null, `?username=eq.${encodeURIComponent(currentUser.username)}&role=eq.owner`);
+                if (!u?.length || u[0].password !== oldPwd) { alert('旧密码错误'); return; }
+                
+                // 更新新密码
+                await db('users', 'PATCH', { password: newPwd }, `?username=eq.${encodeURIComponent(currentUser.username)}`);
+                document.getElementById('oldPassword').value = '';
+                document.getElementById('newPassword').value = '';
+                document.getElementById('confirmPassword').value = '';
+                alert('密码修改成功！');
+            } catch (e) { alert('修改失败'); console.error(e); }
         }
 
         async function uploadAvatar(num, input) {
