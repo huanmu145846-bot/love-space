@@ -181,7 +181,8 @@
         .comments-section { margin-top: 15px; padding-top: 15px; border-top: 1px dashed var(--rose-light); }
         .comment-item { display: flex; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--rose-light); }
         .comment-item:last-child { border-bottom: none; }
-        .comment-avatar { width: 32px; height: 32px; border-radius: 50%; background: var(--rose-light); display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; }
+        .comment-avatar { width: 32px; height: 32px; border-radius: 50%; background: var(--rose-light); display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; overflow: hidden; }
+        .comment-avatar img { width: 100%; height: 100%; object-fit: cover; }
         .comment-content { flex: 1; }
         .comment-header { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
         .comment-name { font-size: 13px; font-weight: 500; }
@@ -857,7 +858,7 @@
                     <div class="comments-list">${postComments.map(c => {
                         const replyComment = c.reply_to ? postComments.find(pc => pc.id === c.reply_to) : null;
                         return `<div class="comment-item">
-                            <div class="comment-avatar">${c.username === 'yhr' || c.username === config.name1 ? '👦' : c.username === 'hhy' || c.username === config.name2 ? '👧' : '👤'}</div>
+                            <div class="comment-avatar">${(c.username === 'yhr' || c.username === config.name1) ? (config.avatar1 ? `<img src="${config.avatar1}">` : '👦') : (c.username === 'hhy' || c.username === config.name2) ? (config.avatar2 ? `<img src="${config.avatar2}">` : '👧') : '👤'}</div>
                             <div class="comment-content">
                                 <div class="comment-header"><span class="comment-name">${escapeHtml(c.username)}</span><span class="comment-date">${new Date(c.created_at).toLocaleString('zh-CN')}</span></div>
                                 ${replyComment ? `<div class="comment-reply-to">回复 @${escapeHtml(replyComment.username)}</div>` : ''}
