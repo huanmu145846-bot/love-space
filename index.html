@@ -47,6 +47,12 @@
         .login-tab.active { background: var(--rose); color: white; }
         .login-form { display: none; }
         .login-form.active { display: block; }
+        .login-select-wrapper { position: relative; width: 100%; margin-bottom: 12px; }
+        .login-select-wrapper select { width: 100%; padding: 15px 20px; padding-left: 55px; border: 2px solid var(--rose-light); border-radius: 25px; background: var(--bg-secondary); font-size: 15px; color: var(--text); font-family: inherit; appearance: none; cursor: pointer; }
+        .login-select-wrapper select:focus { outline: none; border-color: var(--rose); }
+        .login-select-avatar { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); width: 32px; height: 32px; border-radius: 50%; background: var(--rose-light); display: flex; align-items: center; justify-content: center; font-size: 16px; overflow: hidden; pointer-events: none; }
+        .login-select-avatar img { width: 100%; height: 100%; object-fit: cover; }
+        .login-select-arrow { position: absolute; right: 20px; top: 50%; transform: translateY(-50%); pointer-events: none; color: var(--text-light); }
         .login-input { width: 100%; padding: 15px 20px; border: 2px solid var(--rose-light); border-radius: 25px; background: var(--bg-secondary); font-size: 15px; color: var(--text); transition: all 0.3s; font-family: inherit; margin-bottom: 12px; }
         .login-input:focus { outline: none; border-color: var(--rose); }
         .login-btn { width: 100%; padding: 15px; border: none; border-radius: 25px; background: linear-gradient(135deg, var(--rose) 0%, var(--rose-dark) 100%); color: white; font-size: 15px; cursor: pointer; transition: all 0.3s; font-family: inherit; margin-top: 10px; }
@@ -294,7 +300,11 @@
                 <button class="login-tab" onclick="switchLoginTab('visitor')">👀 访客</button>
             </div>
             <div class="login-form active" id="ownerLoginForm">
-                <select class="login-input" id="ownerSelect"><option value="yhr">yhr 👦</option><option value="hhy">hhy 👧</option></select>
+                <div class="login-select-wrapper">
+                    <div class="login-select-avatar" id="loginSelectAvatar">👦</div>
+                    <select class="login-input" id="ownerSelect" onchange="updateLoginAvatar()" style="margin-bottom:0"><option value="yhr">yhr</option><option value="hhy">hhy</option></select>
+                    <div class="login-select-arrow">▼</div>
+                </div>
                 <input type="password" class="login-input" id="ownerPassword" placeholder="请输入密码">
                 <button class="login-btn" onclick="ownerLogin()">进入小窝 💕</button>
             </div>
@@ -641,6 +651,23 @@
                 bgEl.classList.remove('active');
                 logoEl.innerHTML = '💑';
                 if (previewEl) previewEl.style.display = 'none';
+            }
+            // 更新登录选择框头像
+            updateLoginAvatar();
+        }
+        
+        function updateLoginAvatar() {
+            const select = document.getElementById('ownerSelect');
+            const avatarEl = document.getElementById('loginSelectAvatar');
+            if (!select || !avatarEl) return;
+            
+            const isYhr = select.value === 'yhr';
+            const avatar = isYhr ? config.avatar1 : config.avatar2;
+            
+            if (avatar) {
+                avatarEl.innerHTML = `<img src="${avatar}">`;
+            } else {
+                avatarEl.innerHTML = isYhr ? '👦' : '👧';
             }
         }
         
