@@ -37,7 +37,8 @@
         .login-bg::after { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(254,249,243,0.85) 0%, rgba(252,228,236,0.85) 100%); }
         [data-theme="night"] .login-bg::after { background: linear-gradient(135deg, rgba(15,12,41,0.9) 0%, rgba(26,26,62,0.9) 100%); }
         .login-box { text-align: center; padding: 50px 40px; background: var(--bg-card); border-radius: 30px; box-shadow: 0 25px 80px var(--shadow); max-width: 400px; width: 90%; border: 1px solid rgba(232, 164, 184, 0.2); position: relative; z-index: 10; backdrop-filter: blur(10px); }
-        .login-hearts { font-size: 50px; margin-bottom: 15px; animation: float 3s ease-in-out infinite; }
+        .login-hearts { font-size: 50px; margin-bottom: 15px; animation: float 3s ease-in-out infinite; width: 90px; height: 90px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-left: auto; margin-right: auto; background: var(--rose-light); overflow: hidden; border: 3px solid var(--rose); box-shadow: 0 8px 30px var(--shadow); }
+        .login-hearts img { width: 100%; height: 100%; object-fit: cover; }
         @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
         .login-title { font-family: 'Ma Shan Zheng', cursive; font-size: 32px; color: var(--rose-dark); margin-bottom: 8px; }
         .login-subtitle { color: var(--text-light); font-size: 13px; margin-bottom: 30px; }
@@ -285,7 +286,7 @@
     <div class="login-screen" id="loginScreen">
         <div class="login-bg" id="loginBg"></div>
         <div class="login-box">
-            <div class="login-hearts">💑</div>
+            <div class="login-hearts" id="loginLogo">💑</div>
             <h1 class="login-title">我们的小窝</h1>
             <p class="login-subtitle">登录进入专属空间</p>
             <div class="login-tabs">
@@ -622,10 +623,15 @@
         
         function renderLoginBg() {
             const bgEl = document.getElementById('loginBg');
+            const logoEl = document.getElementById('loginLogo');
             const previewEl = document.getElementById('loginBgPreview');
             if (config.login_bg) {
+                // 设置背景
                 bgEl.style.backgroundImage = `url(${config.login_bg})`;
                 bgEl.classList.add('active');
+                // 设置logo为图片
+                logoEl.innerHTML = `<img src="${config.login_bg}">`;
+                // 设置预览
                 if (previewEl) {
                     previewEl.style.display = 'block';
                     previewEl.querySelector('img').src = config.login_bg;
@@ -633,6 +639,7 @@
             } else {
                 bgEl.style.backgroundImage = '';
                 bgEl.classList.remove('active');
+                logoEl.innerHTML = '💑';
                 if (previewEl) previewEl.style.display = 'none';
             }
         }
