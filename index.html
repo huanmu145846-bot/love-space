@@ -32,7 +32,11 @@
 
         .login-screen { position: fixed; inset: 0; background: var(--bg-primary); display: flex; align-items: center; justify-content: center; z-index: 1000; transition: opacity 0.8s, transform 0.8s; }
         .login-screen.hidden { opacity: 0; pointer-events: none; transform: scale(1.1); }
-        .login-box { text-align: center; padding: 50px 40px; background: var(--bg-card); border-radius: 30px; box-shadow: 0 25px 80px var(--shadow); max-width: 400px; width: 90%; border: 1px solid rgba(232, 164, 184, 0.2); }
+        .login-bg { position: absolute; inset: 0; background-size: cover; background-position: center; opacity: 0; transition: opacity 0.5s; }
+        .login-bg.active { opacity: 1; }
+        .login-bg::after { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(254,249,243,0.85) 0%, rgba(252,228,236,0.85) 100%); }
+        [data-theme="night"] .login-bg::after { background: linear-gradient(135deg, rgba(15,12,41,0.9) 0%, rgba(26,26,62,0.9) 100%); }
+        .login-box { text-align: center; padding: 50px 40px; background: var(--bg-card); border-radius: 30px; box-shadow: 0 25px 80px var(--shadow); max-width: 400px; width: 90%; border: 1px solid rgba(232, 164, 184, 0.2); position: relative; z-index: 10; backdrop-filter: blur(10px); }
         .login-hearts { font-size: 50px; margin-bottom: 15px; animation: float 3s ease-in-out infinite; }
         @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
         .login-title { font-family: 'Ma Shan Zheng', cursive; font-size: 32px; color: var(--rose-dark); margin-bottom: 8px; }
@@ -279,6 +283,7 @@
     <div class="falling-container" id="fallingContainer"></div>
 
     <div class="login-screen" id="loginScreen">
+        <div class="login-bg" id="loginBg"></div>
         <div class="login-box">
             <div class="login-hearts">💑</div>
             <h1 class="login-title">我们的小窝</h1>
@@ -437,6 +442,17 @@
                             <button class="settings-btn" onclick="document.getElementById('avatarInput2').click()">她</button>
                         </div>
                     </div>
+                    <div class="settings-item">
+                        <span class="settings-label">登录背景图</span>
+                        <div>
+                            <button class="settings-btn" onclick="document.getElementById('loginBgInput').click()">上传背景</button>
+                            <button class="settings-btn" onclick="removeLoginBg()" style="margin-left:5px;background:#e57373">删除</button>
+                        </div>
+                        <input type="file" id="loginBgInput" class="hidden-input" accept="image/*" onchange="uploadLoginBg(this)">
+                    </div>
+                    <div id="loginBgPreview" style="margin-top:10px;display:none;">
+                        <img style="width:100%;max-height:150px;object-fit:cover;border-radius:12px;">
+                    </div>
                 </div>
                 <div class="settings-section">
                     <h3 class="settings-title">🔐 修改密码</h3>
@@ -487,7 +503,7 @@
         }
 
         let currentUser = null;
-        let config = { start_date: '', name1: 'yhr', name2: 'hhy', avatar1: '', avatar2: '' };
+        let config = { start_date: '', name1: 'yhr', name2: 'hhy', avatar1: '', avatar2: '', login_bg: '' };
         let posts = [], photos = [], diaries = [], wishes = [], users = [], comments = [], likes = [], messages = [];
         let pendingPostImages = [], currentFilter = 'all', replyTo = null;
         let fallingType = localStorage.getItem('fallingType') || 'hearts';
@@ -567,6 +583,8 @@
                 const data = await db('config', 'GET', null, '?id=eq.main');
                 if (data?.length) config = { ...config, ...data[0] };
                 setSyncStatus('synced', '已连接');
+                // 加载完配置后立即显示登录背景
+                renderLoginBg();
             } catch (e) { setSyncStatus('error', '连接失败'); }
         }
 
@@ -598,11 +616,51 @@
             if (config.avatar1) document.getElementById('avatar1').innerHTML = `<img src="${config.avatar1}">`;
             if (config.avatar2) document.getElementById('avatar2').innerHTML = `<img src="${config.avatar2}">`;
             updateChatHeader();
+            // 渲染登录背景
+            renderLoginBg();
+        }
+        
+        function renderLoginBg() {
+            const bgEl = document.getElementById('loginBg');
+            const previewEl = document.getElementById('loginBgPreview');
+            if (config.login_bg) {
+                bgEl.style.backgroundImage = `url(${config.login_bg})`;
+                bgEl.classList.add('active');
+                if (previewEl) {
+                    previewEl.style.display = 'block';
+                    previewEl.querySelector('img').src = config.login_bg;
+                }
+            } else {
+                bgEl.style.backgroundImage = '';
+                bgEl.classList.remove('active');
+                if (previewEl) previewEl.style.display = 'none';
+            }
+        }
+        
+        async function uploadLoginBg(input) {
+            const file = input.files[0]; if (!file) return;
+            showLoading();
+            try {
+                const d = await readFileAsDataURL(file);
+                const c = await compressImage(d, 1200, 0.8);
+                config.login_bg = c;
+                await saveConfig();
+                renderLoginBg();
+            } catch (e) { console.error(e); alert('上传失败'); }
+            hideLoading();
+            input.value = '';
+        }
+        
+        async function removeLoginBg() {
+            if (!confirm('确定删除登录背景图？')) return;
+            config.login_bg = '';
+            await saveConfig();
+            renderLoginBg();
         }
 
         async function saveConfig() {
             config.start_date = document.getElementById('startDate').value;
-            try { await db('config', 'PATCH', { start_date: config.start_date, avatar1: config.avatar1, avatar2: config.avatar2 }, '?id=eq.main'); setSyncStatus('synced', '已同步'); }
+            try { await db('config', 'PATCH', { start_date: config.start_date, avatar1: config.avatar1, avatar2: config.avatar2, login_bg: config.login_bg }, '?id=eq.main'); setSyncStatus('synced', '已同步'); }
             catch (e) { setSyncStatus('error', '保存失败'); }
         }
 
