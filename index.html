@@ -369,8 +369,14 @@
                     <textarea class="post-textarea" id="postContent" placeholder="分享此刻的心情..."></textarea>
                     <div class="post-image-preview" id="postImagePreview"></div>
                     <div class="post-actions">
-                        <button class="post-image-btn" onclick="document.getElementById('postImageInput').click()">📷 图片</button>
-                        <input type="file" id="postImageInput" class="hidden-input" accept="image/*" multiple onchange="previewPostImages(this)">
+                        <div style="display:flex;align-items:center;gap:10px;">
+                            <button class="post-image-btn" onclick="document.getElementById('postImageInput').click()">📷 图片</button>
+                            <input type="file" id="postImageInput" class="hidden-input" accept="image/*" multiple onchange="previewPostImages(this)">
+                            <label style="display:flex;align-items:center;gap:5px;font-size:13px;cursor:pointer;">
+                                <input type="checkbox" id="postPrivate" style="width:16px;height:16px;accent-color:var(--rose);">
+                                <span>🔒 私密</span>
+                            </label>
+                        </div>
                         <button class="post-submit" id="postSubmitBtn" onclick="publishPost()">发布 💌</button>
                     </div>
                 </div>
@@ -413,6 +419,10 @@
                         <option value="daily">📅 日常</option><option value="date">💑 约会</option>
                         <option value="travel">✈️ 旅行</option><option value="food">🍜 美食</option>
                     </select>
+                    <label style="display:flex;align-items:center;gap:5px;font-size:13px;cursor:pointer;">
+                        <input type="checkbox" id="photoPrivate" style="width:16px;height:16px;accent-color:var(--rose);">
+                        <span>🔒 私密</span>
+                    </label>
                     <button class="album-upload-btn" onclick="document.getElementById('photoInput').click()">📷 上传</button>
                     <input type="file" id="photoInput" class="hidden-input" accept="image/*" multiple onchange="uploadPhotos(this)">
                 </div>
@@ -424,7 +434,13 @@
             <div class="tab-content" id="tab-diary">
                 <div class="diary-form" id="diaryForm">
                     <textarea class="diary-textarea" id="diaryInput" placeholder="记录今天的点滴..."></textarea>
-                    <button class="diary-submit" onclick="addDiary()">发布 💌</button>
+                    <div style="display:flex;align-items:center;justify-content:space-between;margin-top:12px;flex-wrap:wrap;gap:10px;">
+                        <label style="display:flex;align-items:center;gap:5px;font-size:13px;cursor:pointer;">
+                            <input type="checkbox" id="diaryPrivate" style="width:16px;height:16px;accent-color:var(--rose);">
+                            <span>🔒 私密</span>
+                        </label>
+                        <button class="diary-submit" onclick="addDiary()" style="margin-top:0;">发布 💌</button>
+                    </div>
                 </div>
                 <div class="diary-list" id="diaryList"></div>
             </div>
@@ -802,11 +818,15 @@
         async function publishPost() {
             const content = document.getElementById('postContent').value.trim();
             if (!content && !pendingPostImages.length) return;
+            const isPrivate = document.getElementById('postPrivate').checked;
             const btn = document.getElementById('postSubmitBtn');
             btn.disabled = true; btn.textContent = '发布中...';
             try {
-                await db('posts', 'POST', { author: currentUser.username, content, images: pendingPostImages, likes: 0 });
-                document.getElementById('postContent').value = ''; pendingPostImages = []; document.getElementById('postImagePreview').innerHTML = '';
+                await db('posts', 'POST', { author: currentUser.username, content, images: pendingPostImages, likes: 0, is_private: isPrivate });
+                document.getElementById('postContent').value = ''; 
+                pendingPostImages = []; 
+                document.getElementById('postImagePreview').innerHTML = '';
+                document.getElementById('postPrivate').checked = false;
                 posts = await db('posts', 'GET', null, '?order=created_at.desc') || [];
                 loadPosts();
             } catch (e) { alert('发布失败'); }
@@ -815,13 +835,17 @@
 
         function loadPosts() {
             const isOwner = currentUser?.role === 'owner';
-            document.getElementById('postsList').innerHTML = posts.map(post => {
+            // 访客只能看到公开内容
+            const visiblePosts = isOwner ? posts : posts.filter(p => !p.is_private);
+            
+            document.getElementById('postsList').innerHTML = visiblePosts.map(post => {
                 const isName1 = post.author === 'yhr' || post.author === config.name1;
                 const avatar = isName1 ? config.avatar1 : config.avatar2;
                 const date = new Date(post.created_at).toLocaleString('zh-CN');
                 const postLikes = likes.filter(l => l.post_id === post.id);
                 const isLiked = postLikes.some(l => l.username === currentUser?.username);
                 const postComments = comments.filter(c => c.post_id === post.id);
+                const privateTag = post.is_private ? '<span style="margin-left:8px;font-size:11px;color:var(--rose);">🔒私密</span>' : '';
                 
                 let imagesHtml = '';
                 if (post.images?.length) {
@@ -856,7 +880,7 @@
                     <div class="post-item-header">
                         <div class="post-item-avatar">${avatar ? `<img src="${avatar}">` : (isName1 ? '👦' : '👧')}</div>
                         <div class="post-item-info">
-                            <div class="post-item-name">${escapeHtml(post.author)}<span class="role-badge owner">👑</span></div>
+                            <div class="post-item-name">${escapeHtml(post.author)}<span class="role-badge owner">👑</span>${privateTag}</div>
                             <div class="post-item-date">${date}</div>
                         </div>
                         ${isOwner ? `<button class="post-item-delete" onclick="deletePost(${post.id})">×</button>` : ''}
@@ -869,7 +893,7 @@
                     </div>
                     ${commentsHtml}
                 </div>`;
-            }).join('');
+            }).join('') || '<div style="text-align:center;padding:40px;color:var(--text-light);">还没有说说</div>';
         }
 
         async function toggleLike(postId) {
@@ -914,21 +938,39 @@
 
         // ==================== 相册功能 ====================
         function loadPhotos() {
-            const filtered = currentFilter === 'all' ? photos : photos.filter(p => p.category === currentFilter);
+            const isOwner = currentUser?.role === 'owner';
+            // 先按私密性过滤，再按分类过滤
+            const accessiblePhotos = isOwner ? photos : photos.filter(p => !p.is_private);
+            const filtered = currentFilter === 'all' ? accessiblePhotos : accessiblePhotos.filter(p => p.category === currentFilter);
+            
             const grid = document.getElementById('albumGrid'), empty = document.getElementById('albumEmpty');
             if (!filtered.length) { grid.style.display = 'none'; empty.style.display = 'block'; return; }
             grid.style.display = 'block'; empty.style.display = 'none';
             const cats = { daily: '日常', date: '约会', travel: '旅行', food: '美食' };
-            const isOwner = currentUser?.role === 'owner';
-            grid.innerHTML = filtered.map(p => `<div class="masonry-item"><img src="${p.src}" onclick="openLightbox('${p.src.replace(/'/g, "\\'")}')"><span class="photo-category">${cats[p.category] || '日常'}</span>${isOwner ? `<button class="photo-delete" onclick="deletePhoto(${p.id},event)">×</button>` : ''}</div>`).join('');
+            grid.innerHTML = filtered.map(p => {
+                const privateTag = p.is_private ? '🔒 ' : '';
+                return `<div class="masonry-item">
+                    <img src="${p.src}" onclick="openLightbox('${p.src.replace(/'/g, "\\'")}')">
+                    <span class="photo-category">${privateTag}${cats[p.category] || '日常'}</span>
+                    ${isOwner ? `<button class="photo-delete" onclick="deletePhoto(${p.id},event)">×</button>` : ''}
+                </div>`;
+            }).join('');
         }
 
         function filterAlbum(cat, btn) { currentFilter = cat; document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active'); loadPhotos(); }
 
         async function uploadPhotos(input) {
             const cat = document.getElementById('albumCategory').value;
+            const isPrivate = document.getElementById('photoPrivate').checked;
             showLoading();
-            for (const file of input.files) { try { const d = await readFileAsDataURL(file); const c = await compressImage(d, 1000, 0.7); await db('photos', 'POST', { src: c, category: cat }); } catch (e) { console.error(e); } }
+            for (const file of input.files) { 
+                try { 
+                    const d = await readFileAsDataURL(file); 
+                    const c = await compressImage(d, 1000, 0.7); 
+                    await db('photos', 'POST', { src: c, category: cat, is_private: isPrivate }); 
+                } catch (e) { console.error(e); } 
+            }
+            document.getElementById('photoPrivate').checked = false;
             photos = await db('photos', 'GET', null, '?order=created_at.desc') || [];
             loadPhotos(); hideLoading(); input.value = '';
         }
@@ -938,13 +980,29 @@
         // ==================== 日记功能 ====================
         function loadDiaries() {
             const isOwner = currentUser?.role === 'owner';
-            document.getElementById('diaryList').innerHTML = diaries.map(d => `<div class="diary-entry">${isOwner ? `<button class="delete-btn" onclick="deleteDiary(${d.id})">×</button>` : ''}<div class="diary-date">${new Date(d.created_at).toLocaleString('zh-CN')}</div><div class="diary-content">${escapeHtml(d.content)}</div></div>`).join('');
+            const visibleDiaries = isOwner ? diaries : diaries.filter(d => !d.is_private);
+            
+            document.getElementById('diaryList').innerHTML = visibleDiaries.map(d => {
+                const privateTag = d.is_private ? '<span style="margin-left:8px;font-size:11px;color:var(--rose);">🔒私密</span>' : '';
+                return `<div class="diary-entry">
+                    ${isOwner ? `<button class="delete-btn" onclick="deleteDiary(${d.id})">×</button>` : ''}
+                    <div class="diary-date">${new Date(d.created_at).toLocaleString('zh-CN')}${privateTag}</div>
+                    <div class="diary-content">${escapeHtml(d.content)}</div>
+                </div>`;
+            }).join('') || '<div style="text-align:center;padding:40px;color:var(--text-light);">还没有日记</div>';
         }
 
         async function addDiary() {
             const content = document.getElementById('diaryInput').value.trim();
             if (!content) return;
-            try { await db('diaries', 'POST', { content }); document.getElementById('diaryInput').value = ''; diaries = await db('diaries', 'GET', null, '?order=created_at.desc') || []; loadDiaries(); } catch (e) { console.error(e); }
+            const isPrivate = document.getElementById('diaryPrivate').checked;
+            try { 
+                await db('diaries', 'POST', { content, is_private: isPrivate }); 
+                document.getElementById('diaryInput').value = ''; 
+                document.getElementById('diaryPrivate').checked = false;
+                diaries = await db('diaries', 'GET', null, '?order=created_at.desc') || []; 
+                loadDiaries(); 
+            } catch (e) { console.error(e); }
         }
 
         async function deleteDiary(id) { if (!confirm('删除日记？')) return; try { await db('diaries', 'DELETE', null, `?id=eq.${id}`); diaries = diaries.filter(d => d.id !== id); loadDiaries(); } catch (e) { console.error(e); } }
