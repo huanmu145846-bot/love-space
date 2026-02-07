@@ -63,7 +63,8 @@
         .role-badge.visitor { background: var(--rose-light); color: var(--rose-dark); }
 
         .user-bar { position: fixed; top: 20px; left: 20px; z-index: 100; display: flex; align-items: center; gap: 10px; padding: 8px 15px; background: var(--bg-card); border-radius: 25px; box-shadow: 0 3px 15px var(--shadow); }
-        .user-avatar-small { width: 32px; height: 32px; border-radius: 50%; background: var(--rose); display: flex; align-items: center; justify-content: center; font-size: 14px; }
+        .user-avatar-small { width: 32px; height: 32px; border-radius: 50%; background: var(--rose); display: flex; align-items: center; justify-content: center; font-size: 14px; overflow: hidden; }
+        .user-avatar-small img { width: 100%; height: 100%; object-fit: cover; }
         .user-name { font-size: 13px; color: var(--text); }
         .logout-btn { padding: 5px 12px; border: none; background: var(--rose-light); color: var(--rose-dark); border-radius: 15px; cursor: pointer; font-size: 12px; font-family: inherit; }
         .logout-btn:hover { background: var(--rose); color: white; }
@@ -337,13 +338,13 @@
                 <div class="avatar-wrapper">
                     <div class="avatar" id="avatar1">👦</div>
                     <input type="file" id="avatarInput1" class="hidden-input" accept="image/*" onchange="uploadAvatar(1,this)">
-                    <div class="avatar-name" id="name1Display">他</div>
+                    <div class="avatar-name" id="name1Display">yhr</div>
                 </div>
                 <div class="heart-connector">💕</div>
                 <div class="avatar-wrapper">
                     <div class="avatar" id="avatar2">👧</div>
                     <input type="file" id="avatarInput2" class="hidden-input" accept="image/*" onchange="uploadAvatar(2,this)">
-                    <div class="avatar-name" id="name2Display">她</div>
+                    <div class="avatar-name" id="name2Display">hhy</div>
                 </div>
             </div>
             <div class="timer-section">
@@ -466,8 +467,8 @@
                     <div class="settings-item">
                         <span class="settings-label">修改头像</span>
                         <div>
-                            <button class="settings-btn" onclick="document.getElementById('avatarInput1').click()" style="margin-right:5px">他</button>
-                            <button class="settings-btn" onclick="document.getElementById('avatarInput2').click()">她</button>
+                            <button class="settings-btn" onclick="document.getElementById('avatarInput1').click()" style="margin-right:5px">yhr</button>
+                            <button class="settings-btn" onclick="document.getElementById('avatarInput2').click()">hhy</button>
                         </div>
                     </div>
                     <div class="settings-item">
@@ -589,6 +590,9 @@
             document.getElementById('userBar').style.display = 'flex';
             document.getElementById('userName').innerHTML = currentUser.username + `<span class="role-badge ${currentUser.role}">${currentUser.role === 'owner' ? '👑' : '👀'}</span>`;
             
+            // 更新用户头像
+            updateUserBarAvatar();
+            
             const isOwner = currentUser.role === 'owner';
             document.getElementById('postForm').classList.toggle('hidden', !isOwner);
             document.getElementById('diaryForm').classList.toggle('hidden', !isOwner);
@@ -603,6 +607,24 @@
             await loadAllData();
             startTimer();
             if (isOwner) startChatPolling();
+        }
+        
+        function updateUserBarAvatar() {
+            const avatarEl = document.getElementById('userAvatarSmall');
+            const isYhr = currentUser?.username === 'yhr' || currentUser?.username === config.name1;
+            const isHhy = currentUser?.username === 'hhy' || currentUser?.username === config.name2;
+            
+            if (isYhr && config.avatar1) {
+                avatarEl.innerHTML = `<img src="${config.avatar1}">`;
+            } else if (isHhy && config.avatar2) {
+                avatarEl.innerHTML = `<img src="${config.avatar2}">`;
+            } else if (isYhr) {
+                avatarEl.innerHTML = '👦';
+            } else if (isHhy) {
+                avatarEl.innerHTML = '👧';
+            } else {
+                avatarEl.innerHTML = '👤';
+            }
         }
 
         async function loadConfig() {
@@ -644,8 +666,9 @@
             if (config.avatar1) document.getElementById('avatar1').innerHTML = `<img src="${config.avatar1}">`;
             if (config.avatar2) document.getElementById('avatar2').innerHTML = `<img src="${config.avatar2}">`;
             updateChatHeader();
-            // 渲染登录背景
             renderLoginBg();
+            // 更新用户栏头像
+            if (currentUser) updateUserBarAvatar();
         }
         
         function renderLoginBg() {
